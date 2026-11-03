@@ -3,4 +3,4 @@
 
 using Code = std::vector<int>;
 
-std::vector<Code> generateAllCodes(int N, int K);
+std::vector<Code> generateAllCodes(int N, int K, bool allowDuplicates);
