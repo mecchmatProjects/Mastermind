@@ -1,17 +1,20 @@
 #include "Feedback.h"
 #include <algorithm>
 
-Feedback calculateFeedback(const Code& secret, const Code& guess) {
-    int correctPosition = 0;
+GuessResult evaluate(const Code& secret, const Code& guess) {
+    int exact = 0;
+    int maxSecret = *std::max_element(secret.begin(), secret.end());
+    int maxGuess = *std::max_element(guess.begin(), guess.end());
+    int maxValue = std::max(maxSecret, maxGuess);
 
     for (int i = 0; i < secret.size(); i++) {
         if (secret[i] == guess[i]) {
-            correctPosition++;
+            exact++;
         }
     }
 
-    std::vector<int> secretCount(7, 0);
-    std::vector<int> guessCount(7, 0);
+    std::vector<int> secretCount(maxValue + 1, 0);
+    std::vector<int> guessCount(maxValue + 1, 0);
 
     for (int i : secret) {
         secretCount[i]++;
@@ -22,11 +25,11 @@ Feedback calculateFeedback(const Code& secret, const Code& guess) {
     }
 
     int totalMatches = 0;
-    for (int i = 1; i <= 6; i++) {
+    for (int i = 1; i <= maxValue; i++) {
         totalMatches += std::min(secretCount[i], guessCount[i]);
     }
 
-    int wrongPosition = totalMatches - correctPosition;
+    int partial = totalMatches - exact;
 
-    return {correctPosition, wrongPosition};
+    return {exact, partial};
 }

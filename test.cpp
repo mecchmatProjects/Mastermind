@@ -1,6 +1,7 @@
 #include "src/CodeGenerator.h"
 #include "src/Feedback.h"
 #include <iostream>
+#include <cassert>
 
 int main() { 
     //auto codes = generateAllCodes(2, 3);
@@ -22,10 +23,23 @@ int main() {
     Code secret = {1, 2, 2, 4};
     Code guess = {2, 2, 3, 4};
 
-    Feedback result = calculateFeedback(secret, guess);
+    GuessResult result = evaluate(secret, guess);
+    assert(result.exact == 2);
+    assert(result.partial == 1);
 
-    std::cout << "Correct: " << result.correctPosition << '\n';
-    std::cout << "Wrong: " << result.wrongPosition << '\n';
+    std::cout << "Correct: " << result.exact << '\n';
+    std::cout << "Wrong: " << result.partial << '\n';
+
+
+    Code secret2 = {7, 8, 2, 4};
+    Code guess2 = {8, 7, 2, 5};
+
+    GuessResult result2 = evaluate(secret2, guess2);
+    assert(result2.exact == 1);
+    assert(result2.partial == 2);
+
+    std::cout << "Correct: " << result2.exact << std::endl;
+    std::cout << "Wrong: " << result2.partial << std::endl;
     
     return 0;
 }

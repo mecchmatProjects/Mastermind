@@ -1,9 +1,9 @@
 #pragma once
 #include "CodeGenerator.h"
 
-struct Feedback {
-    int correctPosition;
-    int wrongPosition;
+struct GuessResult {
+    int exact; //correctPosition
+    int partial; //wrongPosition
 };
 
-Feedback calculateFeedback(const Code& secret, const Code& guess);
+GuessResult evaluate(const Code& secret, const Code& guess);
