@@ -10,3 +10,12 @@ struct GameConfig {
     bool allowDuplicates;
     int maxAttempts;
 };
+
+inline bool isValidConfig(const GameConfig& config) {
+    if (config.codeLength <= 0 || config.symbolCount <= 0 ||
+        config.maxAttempts <= 0) {
+        return false;
+        }
+
+    return config.allowDuplicates || config.codeLength <= config.symbolCount;
+}
