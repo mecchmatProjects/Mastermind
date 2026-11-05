@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.20)
+project(Mastermind LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+add_executable(Mastermind main.cpp src/GameConfig.h)
