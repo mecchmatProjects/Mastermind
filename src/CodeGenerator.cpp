@@ -8,7 +8,7 @@ void generate(int N, int K, bool allowDuplicates, Code& current, std::vector<Cod
     }
 
     for (int i = 1; i <= K; i++) {
-    bool exists = false;
+        bool exists = false;
 
         for (int x : current) {
             if (i == x) {

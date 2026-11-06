@@ -1,5 +1,6 @@
 #include "src/CodeGenerator.h"
 #include "src/Feedback.h"
+#include "src/EliminationSolver.h"
 #include <iostream>
 #include <cassert>
 
@@ -40,6 +41,33 @@ int main() {
 
     std::cout << "Correct: " << result2.exact << std::endl;
     std::cout << "Wrong: " << result2.partial << std::endl;
+
+
+    GameConfig config = {4, 6, true, 10};
+    EliminationSolver solver(config);
+
+    Code firstGuess = solver.nextGuess();
+    assert(firstGuess == Code({1, 1, 1, 1}));
+
+    solver.update(firstGuess, GuessResult{4, 0});
+
+    Code next = solver.nextGuess();
+    assert(next == firstGuess);
+
+    std::cout << "EliminationSolver test passed" << std::endl;
+
+    GameConfig config2 = {2, 3, true, 10};
+    EliminationSolver solver2(config2);
+
+    Code guess3 = {1, 1};
+    GuessResult feedback3 = {0, 0};
+
+    solver2.update(guess3, feedback3);
+
+    Code next3 = solver2.nextGuess();
+    assert(next3 == Code({2, 2}));
+
+    std::cout << "Elimination filtering test passed" << std::endl;
     
     return 0;
 }
