@@ -10,7 +10,8 @@ add_executable(Mastermind
         src/SecretGenerator.h
         src/SecretGenerator.cpp
         src/Validator.h
-        src/Validator.cpp)
+        src/Validator.cpp
+        src/Feedback.cpp)
 
 add_executable(ValidatorTests
         tests/ValidatorTests.cpp

@@ -5,6 +5,9 @@
 #include <sstream>
 #include <string>
 
+#include "src/Feedback.h"
+#include "src/SecretGenerator.h"
+
 #include "src/Validator.h"
 
 bool readNumber(std::istringstream& input, int& number) {
@@ -82,8 +85,28 @@ int main() {
               << "Duplicates: " << (config.allowDuplicates ? "yes" : "no") << '\n'
               << "Attempts: " << config.maxAttempts << '\n';
 
+    const Code secret = generateSecret(config);
     Code guess;
-    if (readGuess(guess, config)) {
-        std::cout << "Guess accepted.\n";
+
+    for (int attemptsLeft = config.maxAttempts; attemptsLeft > 0; --attemptsLeft) {
+        if (!readGuess(guess, config)) {
+            return 0;
+        }
+
+        const GuessResult result = evaluate(secret, guess);
+        std::cout << "Exact: " << result.exact << '\n'
+                  << "Partial: " << result.partial << '\n'
+                  << "Attempts remaining: " << attemptsLeft - 1 << '\n';
+
+        if (result.exact == config.codeLength) {
+            std::cout << "You guessed the secret!\n";
+            return 0;
+        }
     }
+
+    std::cout << "No attempts left. The secret was:";
+    for (int symbol : secret) {
+        std::cout << ' ' << symbol;
+    }
+    std::cout << '\n';
 }
