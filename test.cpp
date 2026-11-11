@@ -1,8 +1,11 @@
 #include "src/CodeGenerator.h"
 #include "src/Feedback.h"
 #include "src/EliminationSolver.h"
+#include "src/RandomSolver.h"
 #include <iostream>
 #include <cassert>
+#include <set>
+#include <stdexcept>
 
 int main() { 
     //auto codes = generateAllCodes(2, 3);
@@ -68,6 +71,43 @@ int main() {
     assert(next3 == Code({2, 2}));
 
     std::cout << "Elimination filtering test passed" << std::endl;
+
+    GameConfig randomConfig = {2, 3, false, 10};
+    RandomSolver randomSolver(randomConfig);
+
+    std::set<Code> usedCodes;
+
+    for (int i = 0; i < 6; i++) {
+        Code randomGuess = randomSolver.nextGuess();
+
+        assert(randomGuess.size() == 2);
+
+        for (int symbol : randomGuess) {
+            assert(symbol >= 1 && symbol <= 3);
+        }
+
+        assert(randomGuess[0] != randomGuess[1]);
+        assert(usedCodes.insert(randomGuess).second);
+
+        randomSolver.update(randomGuess, GuessResult{0, 0});
+    }
+
+    assert(usedCodes.size() == 6);
+
+    std::cout << "RandomSolver test passed" << std::endl;
+
+    bool exceptionThrown = false;
+
+    try {
+        randomSolver.nextGuess();
+    }
+    catch (const std::runtime_error&) {
+        exceptionThrown = true;
+    }
+
+    assert(exceptionThrown);
+
+    std::cout << "RandomSolver exhaustion test passed" << std::endl;
     
     return 0;
 }

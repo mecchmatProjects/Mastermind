@@ -5,12 +5,12 @@
 
 class EliminationSolver {
 
-    public:
-        EliminationSolver(const GameConfig& config);
-        Code nextGuess();
-        void update(const Code& guess, const GuessResult& result);
+public:
+    EliminationSolver(const GameConfig& config);
+    Code nextGuess();
+    void update(const Code& guess, const GuessResult& result);
 
-    private:
-        std::vector<Code> candidates;
+private:
+    std::vector<Code> candidates;
 
 };
