@@ -26,6 +26,20 @@ int main() {
 
     std::cout << "CodeGenerator count tests passed" << std::endl;
 
+
+    auto singleCode = generateAllCodes(1, 1, true);
+
+    assert(singleCode.size() == 1);
+    assert(singleCode[0] == Code({1}));
+
+    auto noDuplicateCode = generateAllCodes(1, 1, false);
+
+    assert(noDuplicateCode.size() == 1);
+    assert(noDuplicateCode[0] == Code({1}));
+
+    std::cout << "CodeGenerator minimal configuration test passed" << std::endl;
+
+
     for (Code c : codes3) {
         for (int i : c) {
             std::cout << i << ' ';
@@ -68,6 +82,17 @@ int main() {
     assert(result3.partial == 0);
 
     std::cout << "Feedback duplicates test passed" << std::endl;
+
+
+    Code secret4 = {1, 2, 3, 4};
+    Code guess5 = {4, 3, 2, 1};
+
+    GuessResult result4 = evaluate(secret4, guess5);
+
+    assert(result4.exact == 0);
+    assert(result4.partial == 4);
+
+    std::cout << "Feedback all partial test passed" << std::endl;
 
 
     GameConfig config = {4, 6, true, 10};
