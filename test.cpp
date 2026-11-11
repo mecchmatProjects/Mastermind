@@ -12,6 +12,20 @@ int main() {
     //auto codes2 = generateAllCodes(4, 6);
     auto codes3 = generateAllCodes(2, 3, false);
 
+    auto codesWithDuplicates = generateAllCodes(4, 6, true);
+    auto codesWithoutDuplicates = generateAllCodes(4, 6, false);
+
+    assert(codesWithDuplicates.size() == 1296);
+    assert(codesWithoutDuplicates.size() == 360);
+    
+    auto impossibleCodes = generateAllCodes(5, 3, false);
+
+    assert(impossibleCodes.empty());
+
+    std::cout << "CodeGenerator impossible configuration test passed" << std::endl;
+
+    std::cout << "CodeGenerator count tests passed" << std::endl;
+
     for (Code c : codes3) {
         for (int i : c) {
             std::cout << i << ' ';
