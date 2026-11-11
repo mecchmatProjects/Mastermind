@@ -59,6 +59,16 @@ int main() {
     std::cout << "Correct: " << result2.exact << std::endl;
     std::cout << "Wrong: " << result2.partial << std::endl;
 
+    Code secret3 = {1, 1, 2, 3};
+    Code guess4 = {1, 2, 2, 2};
+
+    GuessResult result3 = evaluate(secret3, guess4);
+
+    assert(result3.exact == 2);
+    assert(result3.partial == 0);
+
+    std::cout << "Feedback duplicates test passed" << std::endl;
+
 
     GameConfig config = {4, 6, true, 10};
     EliminationSolver solver(config);
