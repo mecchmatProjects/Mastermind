@@ -96,6 +96,38 @@ int main() {
 
     std::cout << "Elimination filtering test passed" << std::endl;
 
+    GameConfig config3 = {2, 3, false, 10};
+    EliminationSolver solver3(config3);
+
+    solver3.update(Code{1, 2}, GuessResult{0, 1});
+    solver3.update(Code{2, 3}, GuessResult{0, 1});
+
+    Code finalGuess = solver3.nextGuess();
+
+    assert(finalGuess == Code({3, 1}));
+
+    std::cout << "Elimination multiple updates test passed" << std::endl;
+
+    GameConfig config4 = {2, 3, false, 10};
+    EliminationSolver solver4(config4);
+
+    solver4.update(Code{1, 2}, GuessResult{2, 0});
+    solver4.update(Code{1, 2}, GuessResult{0, 0});
+
+    bool eliminationException = false;
+
+    try {
+        solver4.nextGuess();
+    }
+    catch (const std::runtime_error&) {
+        eliminationException = true;
+    }
+
+    assert(eliminationException);
+
+    std::cout << "Elimination exhaustion test passed" << std::endl;
+
+
     GameConfig randomConfig = {2, 3, false, 10};
     RandomSolver randomSolver(randomConfig);
 
