@@ -94,6 +94,30 @@ int main() {
 
     std::cout << "Feedback all partial test passed" << std::endl;
 
+    Code emptySecret = {};
+    Code emptyGuess = {};
+
+    GuessResult emptyResult = evaluate(emptySecret, emptyGuess);
+
+    assert(emptyResult.exact == 0);
+    assert(emptyResult.partial == 0);
+
+    std::cout << "Feedback empty codes test passed" << std::endl;
+
+
+    bool invalidLengthException = false;
+
+    try {
+        evaluate(Code{1, 2, 3}, Code{1, 2});
+    }
+    catch (const std::invalid_argument&) {
+        invalidLengthException = true;
+    }
+
+    assert(invalidLengthException);
+
+    std::cout << "Feedback different lengths test passed" << std::endl;
+
 
     GameConfig config = {4, 6, true, 10};
     EliminationSolver solver(config);
@@ -189,6 +213,29 @@ int main() {
     assert(exceptionThrown);
 
     std::cout << "RandomSolver exhaustion test passed" << std::endl;
+
+
+    GameConfig randomConfig2 = {2, 2, true, 10};
+    RandomSolver randomSolver2(randomConfig2);
+
+    std::set<Code> randomCodes;
+
+    for (int i = 0; i < 4; i++) {   
+        Code randomGuess = randomSolver2.nextGuess();
+
+        assert(randomGuess.size() == 2);
+
+        for (int symbol : randomGuess) {
+            assert(symbol >= 1 && symbol <= 2);
+        }
+
+        assert(randomCodes.insert(randomGuess).second);
+    }
+
+    assert(randomCodes.size() == 4);
+
+    std::cout << "RandomSolver duplicates allowed test passed" << std::endl;
+
     
     return 0;
 }
