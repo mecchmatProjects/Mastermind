@@ -1,6 +1,4 @@
 #pragma once
-#include <vector>
-
-using Code = std::vector<int>;
+#include "Code.h"
 
 std::vector<Code> generateAllCodes(int N, int K, bool allowDuplicates);
