@@ -1,4 +1,5 @@
 #include "CodeGenerator.h"
+#include <stdexcept>
 
 void generate(int N, int K, bool allowDuplicates, Code& current, std::vector<Code>& allCodes) {
 
@@ -26,6 +27,13 @@ void generate(int N, int K, bool allowDuplicates, Code& current, std::vector<Cod
 }
 
 std::vector<Code> generateAllCodes(int N, int K, bool allowDuplicates) {
+    if (N<= 0 || K<= 0){
+        throw std::invalid_argument("N and K must be positive");
+    }
+    if (!allowDuplicates && N > K) {
+        throw std::invalid_argument("Impossible configuration");
+    }
+
     std::vector<Code> allCodes;
     Code current;
 

@@ -18,9 +18,15 @@ int main() {
     assert(codesWithDuplicates.size() == 1296);
     assert(codesWithoutDuplicates.size() == 360);
     
-    auto impossibleCodes = generateAllCodes(5, 3, false);
+    bool impossibleConfigException = false;
 
-    assert(impossibleCodes.empty());
+    try {
+        generateAllCodes(5, 3, false);
+    }
+    catch (const std::invalid_argument&) {
+        impossibleConfigException = true;
+    }
+    assert(impossibleConfigException);
 
     std::cout << "CodeGenerator impossible configuration test passed" << std::endl;
 
