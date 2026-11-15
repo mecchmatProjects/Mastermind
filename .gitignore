@@ -8,3 +8,8 @@ build/
 build-mingw/
 build-ninja/
 *.exe
+
+test_statistics
+test_simulation
+test_metrics
+experiments
