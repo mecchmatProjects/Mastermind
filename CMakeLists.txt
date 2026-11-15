@@ -22,6 +22,7 @@ add_executable(SolverTests
     src/Feedback.cpp
     src/EliminationSolver.cpp
     src/RandomSolver.cpp
+    src/InformationSolver.cpp
 )
 
 enable_testing()
@@ -52,6 +53,16 @@ add_executable(Experiments
     src/Feedback.cpp
     src/EliminationSolver.cpp
     src/RandomSolver.cpp
+    src/InformationSolver.cpp
+    src/SecretGenerator.cpp
+)
+
+add_executable(Complexity
+    complexity.cpp
+    src/Metrics.cpp
+    src/CodeGenerator.cpp
+    src/Feedback.cpp
+    src/EliminationSolver.cpp
     src/SecretGenerator.cpp
 )
 
