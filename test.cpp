@@ -2,6 +2,7 @@
 #include "src/Feedback.h"
 #include "src/EliminationSolver.h"
 #include "src/RandomSolver.h"
+#include "src/InformationSolver.h"
 #include <iostream>
 #include <cassert>
 #include <set>
@@ -128,10 +129,13 @@ int main() {
     GameConfig config = {4, 6, true, 10};
     EliminationSolver solver(config);
 
+    assert(solver.candidateCount() == 1296);
+
     Code firstGuess = solver.nextGuess();
     assert(firstGuess == Code({1, 1, 1, 1}));
 
     solver.update(firstGuess, GuessResult{4, 0});
+    assert(solver.candidateCount() == 1);
 
     Code next = solver.nextGuess();
     assert(next == firstGuess);
@@ -242,6 +246,95 @@ int main() {
 
     std::cout << "RandomSolver duplicates allowed test passed" << std::endl;
 
-    
+    GameConfig infoConfig = {2, 3, false, 10};
+    InformationSolver infoSolver(infoConfig);
+
+    Code infoSecret = {3, 1};
+    bool infoSolved = false;
+
+    for (int attempt = 0; attempt < infoConfig.maxAttempts; attempt++) {
+        Code infoGuess = infoSolver.nextGuess();
+
+        GuessResult infoResult = evaluate(infoSecret, infoGuess);
+
+        if (infoResult.exact == infoConfig.codeLength) {
+            infoSolved = true;
+            break;
+        }
+
+        infoSolver.update(infoGuess, infoResult);
+    }
+
+    assert(infoSolved);
+
+    std::cout << "InformationSolver game test passed" << std::endl;
+
+    GameConfig infoConfig2 = {3, 3, true, 10};
+    InformationSolver smartSolver(infoConfig2);
+
+    Code smartGuess = smartSolver.nextGuess();
+
+    assert(smartGuess != Code({1, 1, 1}));
+
+    std::cout << "InformationSolver strategy test passed" << std::endl;
+
+    GameConfig comparisonConfig = {3, 3, true, 10};
+
+    std::vector<Code> comparisonSecrets = generateAllCodes(
+        comparisonConfig.codeLength,
+        comparisonConfig.symbolCount,
+        comparisonConfig.allowDuplicates
+    );
+
+    int eliminationMoves = 0;
+    int informationMoves = 0;
+
+    for (const Code& comparisonSecret : comparisonSecrets) {
+        EliminationSolver elimination(comparisonConfig);
+        InformationSolver information(comparisonConfig);
+
+        bool eliminationWon = false;
+        bool informationWon = false;
+
+        for (int attempt = 1; attempt <= comparisonConfig.maxAttempts; attempt++) {
+            Code guess = elimination.nextGuess();
+            GuessResult result = evaluate(comparisonSecret, guess);
+
+            if (result.exact == comparisonConfig.codeLength) {
+                eliminationMoves += attempt;
+                eliminationWon = true;
+                break;
+            }
+
+            elimination.update(guess, result);
+        }
+
+        for (int attempt = 1; attempt <= comparisonConfig.maxAttempts; attempt++) {
+            Code guess = information.nextGuess();
+            GuessResult result = evaluate(comparisonSecret, guess);
+
+            if (result.exact == comparisonConfig.codeLength) {
+                informationMoves += attempt;
+                informationWon = true;
+                break;
+            }
+
+            information.update(guess, result);
+        }
+
+        assert(eliminationWon);
+        assert(informationWon);
+    }
+
+    double games = static_cast<double>(comparisonSecrets.size());
+
+    std::cout << "Elimination average guesses: "
+            << eliminationMoves / games << std::endl;
+
+    std::cout << "Information average guesses: "
+            << informationMoves / games << std::endl;
+
+    std::cout << "Solver comparison test passed" << std::endl;
+
     return 0;
 }
