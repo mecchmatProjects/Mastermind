@@ -1,24 +1,21 @@
 #include "src/Simulation.h"
 #include "src/EliminationSolver.h"
 #include "src/RandomSolver.h"
+#include "src/InformationSolver.h"
+#include "src/SecretGenerator.h"
 #include "src/CodeGenerator.h"
 #include "src/GameConfig.h"
 
 #include <iomanip>
 #include <iostream>
-#include <random>
 #include <string>
 #include <vector>
 
 struct Experiment {
     GameConfig config;
     int games;
+    int infoGames;
 };
-
-Code randomSecret(const std::vector<Code>& allCodes, std::mt19937& generator) {
-    std::uniform_int_distribution<std::size_t> pick(0, allCodes.size() - 1);
-    return allCodes[pick(generator)];
-}
 
 void printHeader() {
     std::cout << std::left
@@ -41,20 +38,16 @@ void printRow(const GameConfig& c, const std::string& solverName, const Simulati
 
 int main() {
     std::vector<Experiment> experiments = {
-        {{3, 5, false, 12}, 200},
-        {{4, 6, true, 12}, 200},
-        {{5, 8, true, 12}, 30},
+        {{3, 5, false, 12}, 200, 200},
+        {{4, 6, true, 12}, 200, 100},
+        {{5, 8, true, 12}, 30, 10},
     };
-
-    std::mt19937 generator(std::random_device{}());
 
     printHeader();
 
     for (const Experiment& e : experiments) {
         const GameConfig& c = e.config;
-        std::vector<Code> allCodes = generateAllCodes(c.codeLength, c.symbolCount, c.allowDuplicates);
-
-        auto makeSecret = [&]() { return randomSecret(allCodes, generator); };
+        auto makeSecret = [&]() { return generateSecret(c); };
 
         SimulationResult random = runSimulation(
             e.games, c.codeLength, c.maxAttempts, makeSecret,
@@ -65,6 +58,11 @@ int main() {
             e.games, c.codeLength, c.maxAttempts, makeSecret,
             [&]() { return EliminationSolver(c); }, evaluate);
         printRow(c, "Elimination", elimination);
+
+        SimulationResult information = runSimulation(
+            e.infoGames, c.codeLength, c.maxAttempts, makeSecret,
+            [&]() { return InformationSolver(c); }, evaluate);
+        printRow(c, "Information", information);
     }
 
     return 0;
