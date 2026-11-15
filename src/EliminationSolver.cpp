@@ -31,3 +31,7 @@ void EliminationSolver::update(
 
     candidates = remaining;
 }
+
+std::size_t EliminationSolver::candidateCount() const {
+    return candidates.size();
+}

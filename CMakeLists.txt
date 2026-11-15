@@ -22,6 +22,7 @@ add_executable(SolverTests
     src/Feedback.cpp
     src/EliminationSolver.cpp
     src/RandomSolver.cpp
+    src/InformationSolver.cpp
 )
 
 enable_testing()
