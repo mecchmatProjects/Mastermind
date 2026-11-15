@@ -1,0 +1,10 @@
+
+build/
+build-mingw/
+build-ninja/
+*.exe
+
+build/
+build-mingw/
+build-ninja/
+*.exe
