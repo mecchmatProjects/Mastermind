@@ -4,7 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-
+#include "src/Difficulty.h"
 #include "src/Feedback.h"
 #include "src/SecretGenerator.h"
 
@@ -76,8 +76,40 @@ bool readGuess(Code& guess, const GameConfig& config) {
 
 int main() {
     GameConfig config{};
-    if (!readConfig(config)) {
-        return 0;
+    std::string line;
+
+    while (true) {
+        std::cout << "Choose difficulty:\n"
+                  << "1. Easy\n"
+                  << "2. Medium\n"
+                  << "3. Hard\n"
+                  << "0. Custom\n";
+
+        if (!std::getline(std::cin, line)) {
+            return 0;
+        }
+
+        std::istringstream input(line);
+        int choice;
+        if (!readNumber(input, choice) || !(input >> std::ws).eof() ||
+            choice < 0 || choice > 3) {
+            std::cout << "Enter a number from 0 to 3.\n";
+            continue;
+            }
+
+        if (choice == 0) {
+            if (!readConfig(config)) {
+                return 0;
+            }
+        } else if (choice == 1) {
+            config = makeDifficultyConfig(DifficultyLevel::Easy);
+        } else if (choice == 2) {
+            config = makeDifficultyConfig(DifficultyLevel::Medium);
+        } else {
+            config = makeDifficultyConfig(DifficultyLevel::Hard);
+        }
+
+        break;
     }
 
     std::cout << "Code length: " << config.codeLength << '\n'
