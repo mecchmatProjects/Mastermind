@@ -10,6 +10,8 @@ add_executable(Mastermind
     src/Validator.cpp
     src/Feedback.cpp
     src/Difficulty.cpp
+    src/CodeGenerator.cpp
+    src/EliminationSolver.cpp
 )
 
 add_executable(ValidatorTests
