@@ -9,6 +9,7 @@ add_executable(Mastermind
     src/SecretGenerator.cpp
     src/Validator.cpp
     src/Feedback.cpp
+    src/Difficulty.cpp
 )
 
 add_executable(ValidatorTests
@@ -23,6 +24,7 @@ add_executable(SolverTests
     src/EliminationSolver.cpp
     src/RandomSolver.cpp
     src/InformationSolver.cpp
+    src/Difficulty.cpp
 )
 
 enable_testing()

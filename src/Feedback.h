@@ -1,5 +1,5 @@
 #pragma once
-#include "CodeGenerator.h"
+#include "Code.h"
 
 struct GuessResult {
     int exact; //correctPosition
