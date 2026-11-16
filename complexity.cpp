@@ -133,7 +133,12 @@ int main() {
     candidatesPerMove({4, 6, true, 12}, 50, 8);
     candidatesPerMove({5, 8, true, 12}, 10, 8);
 
-    std::cout << "Peak memory of this process: "
-              << static_cast<double>(peakMemoryBytes()) / (1024.0 * 1024.0) << " MB\n";
+    std::size_t peak = peakMemoryBytes();
+    if (peak == 0) {
+        std::cout << "Peak memory of this process: not available on this platform\n";
+    } else {
+        std::cout << "Peak memory of this process: "
+                  << static_cast<double>(peak) / (1024.0 * 1024.0) << " MB\n";
+    }
     return 0;
 }

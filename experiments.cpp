@@ -14,7 +14,6 @@
 struct Experiment {
     GameConfig config;
     int games;
-    int infoGames;
 };
 
 void printHeader() {
@@ -38,29 +37,38 @@ void printRow(const GameConfig& c, const std::string& solverName, const Simulati
 
 int main() {
     std::vector<Experiment> experiments = {
-        {{3, 5, false, 12}, 200, 200},
-        {{4, 6, true, 12}, 200, 100},
-        {{5, 8, true, 12}, 30, 10},
+        {{3, 5, false, 12}, 200},
+        {{4, 6, true, 12}, 100},
+        {{5, 8, true, 12}, 15},
     };
 
     printHeader();
 
     for (const Experiment& e : experiments) {
         const GameConfig& c = e.config;
-        auto makeSecret = [&]() { return generateSecret(c); };
+        std::vector<Code> secrets;
+        for (int i = 0; i < e.games; i++) {
+            secrets.push_back(generateSecret(c));
+        }
 
+        std::size_t next = 0;
+        auto makeSecret = [&]() { return secrets[next++]; };
+
+        next = 0;
         SimulationResult random = runSimulation(
             e.games, c.codeLength, c.maxAttempts, makeSecret,
             [&]() { return RandomSolver(c); }, evaluate);
         printRow(c, "Random", random);
 
+        next = 0;
         SimulationResult elimination = runSimulation(
             e.games, c.codeLength, c.maxAttempts, makeSecret,
             [&]() { return EliminationSolver(c); }, evaluate);
         printRow(c, "Elimination", elimination);
 
+        next = 0;
         SimulationResult information = runSimulation(
-            e.infoGames, c.codeLength, c.maxAttempts, makeSecret,
+            e.games, c.codeLength, c.maxAttempts, makeSecret,
             [&]() { return InformationSolver(c); }, evaluate);
         printRow(c, "Information", information);
     }

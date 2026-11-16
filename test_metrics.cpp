@@ -21,7 +21,9 @@ int main() {
 
     std::vector<char> block(50 * 1024 * 1024, 1);
     std::size_t peak = peakMemoryBytes();
+#if defined(__unix__) || defined(__APPLE__)
     assert(peak > 0);
+#endif
     assert(block[0] == 1);
 
     std::cout << "Metrics: all tests passed (peak " << peak / (1024 * 1024) << " MB)\n";
