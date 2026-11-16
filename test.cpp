@@ -3,6 +3,7 @@
 #include "src/EliminationSolver.h"
 #include "src/RandomSolver.h"
 #include "src/InformationSolver.h"
+#include "src/Difficulty.h"
 #include <iostream>
 #include <cassert>
 #include <set>
@@ -335,6 +336,38 @@ int main() {
             << informationMoves / games << std::endl;
 
     std::cout << "Solver comparison test passed" << std::endl;
+
+    GameConfig easyConfig = makeDifficultyConfig(DifficultyLevel::Easy);
+    GameConfig mediumConfig = makeDifficultyConfig(DifficultyLevel::Medium);
+    GameConfig hardConfig = makeDifficultyConfig(DifficultyLevel::Hard);
+
+    assert(isValidConfig(easyConfig));
+    assert(isValidConfig(mediumConfig));
+    assert(isValidConfig(hardConfig));
+
+    assert(generateAllCodes(
+        easyConfig.codeLength,
+        easyConfig.symbolCount,
+        easyConfig.allowDuplicates
+    ).size() == 24);
+
+    assert(generateAllCodes(
+        mediumConfig.codeLength,
+        mediumConfig.symbolCount,
+        mediumConfig.allowDuplicates
+    ).size() == 1296);
+
+    assert(generateAllCodes(
+        hardConfig.codeLength,
+        hardConfig.symbolCount,
+        hardConfig.allowDuplicates
+    ).size() == 32768);
+
+    assert(easyConfig.maxAttempts == 10);
+    assert(mediumConfig.maxAttempts == 10);
+    assert(hardConfig.maxAttempts == 8);
+
+    std::cout << "Difficulty levels tests passed" << std::endl;
 
     return 0;
 }
