@@ -6,6 +6,7 @@
 #include "src/Difficulty.h"
 #include <iostream>
 #include <cassert>
+#include <limits>
 #include <set>
 #include <stdexcept>
 
@@ -101,6 +102,11 @@ int main() {
     assert(result4.partial == 4);
 
     std::cout << "Feedback all partial test passed" << std::endl;
+
+    const int largestSymbol = std::numeric_limits<int>::max();
+    GuessResult largeSymbols = evaluate({largestSymbol, 1, 2}, {2, 1, largestSymbol});
+    assert(largeSymbols.exact == 1);
+    assert(largeSymbols.partial == 2);
 
     Code emptySecret = {};
     Code emptyGuess = {};
