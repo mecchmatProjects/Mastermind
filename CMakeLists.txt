@@ -12,6 +12,9 @@ add_executable(Mastermind
     src/Difficulty.cpp
     src/CodeGenerator.cpp
     src/EliminationSolver.cpp
+        gui/main.cpp
+        gui/GuiApp.h
+        gui/GuiApp.cpp
 )
 
 add_executable(ValidatorTests
@@ -32,3 +35,8 @@ add_executable(SolverTests
 enable_testing()
 add_test(NAME ValidatorTests COMMAND ValidatorTests)
 add_test(NAME SolverTests COMMAND SolverTests)
+option(MASTERMIND_BUILD_GUI "Build the SFML interface" OFF)
+
+if(MASTERMIND_BUILD_GUI)
+    add_subdirectory(gui)
+endif()
