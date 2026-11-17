@@ -7,7 +7,8 @@
 #include "src/Difficulty.h"
 #include "src/Feedback.h"
 #include "src/SecretGenerator.h"
-
+#include <optional>
+#include "src/EliminationSolver.h"
 #include "src/Validator.h"
 
 bool readNumber(std::istringstream& input, int& number) {
@@ -78,13 +79,34 @@ int main() {
     GameConfig config{};
     std::string line;
 
+    int mode;
+
+    while (true) {
+        std::cout << "Choose game mode:\n"
+                  << "1. You guess the code\n"
+                  << "2. Computer guesses the code\n";
+
+        if (!std::getline(std::cin, line)) {
+            return 0;
+        }
+
+        std::istringstream input(line);
+        if (readNumber(input, mode) && (input >> std::ws).eof() &&
+            (mode == 1 || mode == 2)) {
+            break;
+            }
+
+        std::cout << "Enter 1 or 2.\n";
+    }
+
     while (true) {
         std::cout << "Choose difficulty:\n"
                   << "1. Easy\n"
                   << "2. Medium\n"
-                  << "3. Hard\n"
-                  << "0. Custom\n";
-
+                  << "3. Hard\n";
+        if (mode == 1) {
+            std::cout << "0. Custom\n";
+        }
         if (!std::getline(std::cin, line)) {
             return 0;
         }
@@ -98,6 +120,10 @@ int main() {
             }
 
         if (choice == 0) {
+            if (mode == 2) {
+                std::cout << "Choose a difficulty from 1 to 3.\n";
+                continue;
+            }
             if (!readConfig(config)) {
                 return 0;
             }
@@ -117,11 +143,23 @@ int main() {
               << "Duplicates: " << (config.allowDuplicates ? "yes" : "no") << '\n'
               << "Attempts: " << config.maxAttempts << '\n';
 
+    std::optional<EliminationSolver> solver;
+    if (mode == 2) {
+        solver.emplace(config);
+    }
+
     const Code secret = generateSecret(config);
     Code guess;
 
     for (int attemptsLeft = config.maxAttempts; attemptsLeft > 0; --attemptsLeft) {
-        if (!readGuess(guess, config)) {
+        if (solver) {
+            guess = solver->nextGuess();
+            std::cout << "Computer guess:";
+            for (int symbol : guess) {
+                std::cout << ' ' << symbol;
+            }
+            std::cout << '\n';
+        } else if (!readGuess(guess, config)) {
             return 0;
         }
 
@@ -131,8 +169,13 @@ int main() {
                   << "Attempts remaining: " << attemptsLeft - 1 << '\n';
 
         if (result.exact == config.codeLength) {
-            std::cout << "You guessed the secret!\n";
+            std::cout << (solver ? "Computer guessed the secret!\n"
+                                 : "You guessed the secret!\n");
             return 0;
+        }
+
+        if (solver && attemptsLeft > 1) {
+            solver->update(guess, result);
         }
     }
 
