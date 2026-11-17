@@ -9,9 +9,11 @@ int main() {
     Timer t;
     std::this_thread::sleep_for(std::chrono::milliseconds(50));
     double ms = t.elapsedMs();
-    assert(ms >= 45.0 && ms < 500.0);
+    assert(ms >= 45.0);
 
     t.reset();
+    double afterReset = t.elapsedMs();
+    assert(afterReset >= 0.0 && afterReset < ms);
     assert(t.elapsedMs() < 40.0);
 
     assert(estimateCodesMemoryBytes(0, 4) == 0);

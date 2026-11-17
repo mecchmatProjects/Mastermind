@@ -7,7 +7,7 @@ int main() {
     Statistics empty;
     assert(empty.averageGuesses() == 0.0);
     assert(empty.solvedRate() == 0.0);
-
+    assert(empty.averageGuessesSolved() == 0.0);
     Statistics s;
     s.addGame(4, true);
     s.addGame(6, true);
@@ -20,6 +20,11 @@ int main() {
     assert(s.maxGuesses == 12);
     assert(std::fabs(s.averageGuesses() - 6.75) < 1e-9);
     assert(std::fabs(s.solvedRate() - 0.75) < 1e-9);
+    assert(std::fabs(s.averageGuessesSolved() - 5.0) < 1e-9);
+
+    Statistics lost;
+    lost.addGame(12, false);
+    assert(lost.averageGuessesSolved() == 0.0);
     assert(s.histogram[4] == 1 && s.histogram[12] == 1 && s.histogram[7] == 0);
 
     std::cout << "Statistics: all tests passed\n";

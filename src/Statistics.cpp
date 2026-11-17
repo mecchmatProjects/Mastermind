@@ -10,7 +10,10 @@ void Statistics::addGame(int guessesUsed, bool wasSolved) {
     }
 
     games++;
-    if (wasSolved) solved++;
+    if (wasSolved) {
+    solved++;
+    solvedGuesses += guessesUsed;
+}
     totalGuesses += guessesUsed;
     histogram[guessesUsed]++;
 }
@@ -18,6 +21,11 @@ void Statistics::addGame(int guessesUsed, bool wasSolved) {
 double Statistics::averageGuesses() const {
     if (games == 0) return 0.0;
     return static_cast<double>(totalGuesses) / games;
+}
+
+double Statistics::averageGuessesSolved() const {
+    if (solved == 0) return 0.0;
+    return static_cast<double>(solvedGuesses) / solved;
 }
 
 double Statistics::solvedRate() const {

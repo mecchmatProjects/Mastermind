@@ -20,9 +20,9 @@ void printHeader() {
     std::cout << std::left
               << std::setw(4) << "N" << std::setw(4) << "K" << std::setw(8) << "Repeat"
               << std::setw(13) << "Solver" << std::setw(7) << "Games"
-              << std::setw(9) << "Solved%" << std::setw(8) << "Avg" << std::setw(6) << "Max"
+              << std::setw(9) << "Solved%" << std::setw(8) << "Avg" << std::setw(8) << "AvgWin" << std::setw(6) << "Max"
               << std::setw(12) << "Time(ms)" << '\n';
-    std::cout << std::string(71, '-') << '\n';
+    std::cout << std::string(79, '-') << '\n';
 }
 
 void printRow(const GameConfig& c, const std::string& solverName, const SimulationResult& r) {
@@ -31,7 +31,8 @@ void printRow(const GameConfig& c, const std::string& solverName, const Simulati
               << std::setw(8) << (c.allowDuplicates ? "Yes" : "No")
               << std::setw(13) << solverName << std::setw(7) << r.stats.games
               << std::setw(9) << r.stats.solvedRate() * 100.0
-              << std::setw(8) << r.stats.averageGuesses() << std::setw(6) << r.stats.maxGuesses
+              << std::setw(8) << r.stats.averageGuesses()
+              << std::setw(8) << r.stats.averageGuessesSolved() << std::setw(6) << r.stats.maxGuesses
               << std::setw(12) << r.totalMs << '\n';
 }
 
