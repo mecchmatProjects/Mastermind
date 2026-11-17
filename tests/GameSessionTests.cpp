@@ -70,5 +70,41 @@ int main() {
 
     std::cout << "GameSession restart and validation tests passed\n";
 
+        GameSession loseSession([](const GameConfig&) {
+        return Code{2};
+    });
+
+    GameConfig loseConfig{1, 2, false, 1};
+
+    assert(loseSession.start(GameMode::Play, loseConfig));
+
+    assert(loseSession.submitGuess(Code{1}));
+
+    assert(loseSession.view().status == SessionStatus::OutOfAttempts);
+    assert(loseSession.view().attemptsLeft == 0);
+    assert(loseSession.view().history.size() == 1);
+    assert(loseSession.view().revealedSecret.has_value());
+    assert(loseSession.view().revealedSecret.value() == Code{2});
+
+    assert(!loseSession.submitGuess(Code{1}));
+
+    std::cout << "GameSession loss test passed\n";
+
+        GameSession noDuplicatesSession([](const GameConfig&) {
+        return Code{1, 2, 3};
+    });
+
+    GameConfig noDuplicatesConfig{3, 4, false, 5};
+
+    assert(noDuplicatesSession.start(GameMode::Play, noDuplicatesConfig));
+
+    Code duplicateGuess{1, 1, 2};
+
+    assert(!noDuplicatesSession.submitGuess(duplicateGuess));
+    assert(noDuplicatesSession.view().attemptsLeft == 5);
+    assert(noDuplicatesSession.view().history.empty());
+
+    std::cout << "GameSession no duplicates test passed\n";
+
     return 0;
 }
