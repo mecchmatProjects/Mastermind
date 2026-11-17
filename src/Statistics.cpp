@@ -11,8 +11,8 @@ void Statistics::addGame(int guessesUsed, bool wasSolved) {
 
     games++;
     if (wasSolved) {
-    solved++;
-    solvedGuesses += guessesUsed;
+        solved++;
+        solvedGuesses += guessesUsed;
 }
     totalGuesses += guessesUsed;
     histogram[guessesUsed]++;

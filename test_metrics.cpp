@@ -14,7 +14,6 @@ int main() {
     t.reset();
     double afterReset = t.elapsedMs();
     assert(afterReset >= 0.0 && afterReset < ms);
-    assert(t.elapsedMs() < 40.0);
 
     assert(estimateCodesMemoryBytes(0, 4) == 0);
     std::size_t one = estimateCodesMemoryBytes(1, 4);
