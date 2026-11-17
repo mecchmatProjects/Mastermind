@@ -29,6 +29,19 @@ add_executable(SolverTests
     src/Difficulty.cpp
 )
 
+
+add_executable(GameSessionTests
+    tests/GameSessionTests.cpp
+    gui/GameSession.cpp
+    src/SecretGenerator.cpp
+    src/Validator.cpp
+    src/Feedback.cpp
+    src/CodeGenerator.cpp
+    src/EliminationSolver.cpp
+)
+
+
 enable_testing()
 add_test(NAME ValidatorTests COMMAND ValidatorTests)
 add_test(NAME SolverTests COMMAND SolverTests)
+add_test(NAME GameSessionTests COMMAND GameSessionTests)
