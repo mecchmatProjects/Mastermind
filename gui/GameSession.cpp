@@ -3,6 +3,8 @@
 #include "../src/SecretGenerator.h"
 #include "../src/Validator.h"
 
+#include <utility>
+
 bool GameSession::start(GameMode mode, GameConfig config) {
     if (!isValidConfig(config)) {
         return false;
@@ -14,7 +16,7 @@ bool GameSession::start(GameMode mode, GameConfig config) {
     state.attemptsLeft = config.maxAttempts;
     state.status = SessionStatus::Playing;
 
-    secret = generateSecret(config);
+    secret = secretGenerator(config);
 
     solver.reset();
 
@@ -76,3 +78,7 @@ void GameSession::recordTurn(const Code& guess) {
 const SessionView& GameSession::view() const {
     return state;
 }
+
+GameSession::GameSession(
+    std::function<Code(const GameConfig&)> generator
+) : secretGenerator(std::move(generator)) {}
