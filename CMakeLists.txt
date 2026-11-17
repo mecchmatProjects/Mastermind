@@ -12,9 +12,6 @@ add_executable(Mastermind
     src/Difficulty.cpp
     src/CodeGenerator.cpp
     src/EliminationSolver.cpp
-        gui/main.cpp
-        gui/GuiApp.h
-        gui/GuiApp.cpp
 )
 
 add_executable(ValidatorTests
