@@ -6,3 +6,7 @@ add_executable(MastermindGUI
 )
 
 target_link_libraries(MastermindGUI PRIVATE SFML::Graphics)
+
+target_compile_definitions(MastermindGUI PRIVATE
+        MASTERMIND_FONT_PATH="${CMAKE_CURRENT_SOURCE_DIR}/assets/Barlow-SemiBold.ttf"
+)
