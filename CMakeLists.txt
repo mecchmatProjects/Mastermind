@@ -45,3 +45,9 @@ enable_testing()
 add_test(NAME ValidatorTests COMMAND ValidatorTests)
 add_test(NAME SolverTests COMMAND SolverTests)
 add_test(NAME GameSessionTests COMMAND GameSessionTests)
+
+option(MASTERMIND_BUILD_GUI "Build the SFML interface" OFF)
+
+if(MASTERMIND_BUILD_GUI)
+    add_subdirectory(gui)
+endif()
