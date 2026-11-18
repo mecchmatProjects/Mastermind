@@ -51,3 +51,44 @@ option(MASTERMIND_BUILD_GUI "Build the SFML interface" OFF)
 if(MASTERMIND_BUILD_GUI)
     add_subdirectory(gui)
 endif()
+
+add_executable(StatisticsTests
+    test_statistics.cpp
+    src/Statistics.cpp
+)
+
+add_executable(MetricsTests
+    test_metrics.cpp
+    src/Metrics.cpp
+)
+
+add_executable(SimulationTests
+    test_simulation.cpp
+    src/Statistics.cpp
+    src/Metrics.cpp
+)
+
+add_executable(Experiments
+    experiments.cpp
+    src/Statistics.cpp
+    src/Metrics.cpp
+    src/CodeGenerator.cpp
+    src/Feedback.cpp
+    src/EliminationSolver.cpp
+    src/RandomSolver.cpp
+    src/InformationSolver.cpp
+    src/SecretGenerator.cpp
+)
+
+add_executable(Complexity
+    complexity.cpp
+    src/Metrics.cpp
+    src/CodeGenerator.cpp
+    src/Feedback.cpp
+    src/EliminationSolver.cpp
+    src/SecretGenerator.cpp
+)
+
+add_test(NAME StatisticsTests COMMAND StatisticsTests)
+add_test(NAME MetricsTests COMMAND MetricsTests)
+add_test(NAME SimulationTests COMMAND SimulationTests)
