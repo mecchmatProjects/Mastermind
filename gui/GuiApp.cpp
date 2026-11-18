@@ -65,11 +65,22 @@ void GuiApp::run() {
     centerText(heading, {480.f, 95.f});
 
     sf::Text text(font, "", 24);
-    auto drawLine = [&](const std::string& line, float y) {
+    auto drawLine = [&](const std::string& line, float y, float x = 480.f) {
         text.setString(line);
-        centerText(text, {480.f, y});
+        centerText(text, {x, y});
         window.draw(text);
     };
+
+    const sf::Color pegColors[] = {
+        {252, 129, 129}, {255, 181, 104}, {255, 224, 116}, {101, 214, 174},
+        {119, 198, 255}, {162, 155, 254}, {241, 149, 206}, {214, 224, 236}
+    };
+
+    sf::CircleShape peg(11.f);
+    peg.setOrigin({11.f, 11.f});
+
+    sf::Text pegLabel(font, "", 15);
+    pegLabel.setFillColor(sf::Color(19, 24, 37));
 
     auto formatCode = [](const Code& code) {
         std::string result;
@@ -181,9 +192,23 @@ void GuiApp::run() {
 
             float rowY = 224.f;
             for (const auto& turn : state.history) {
-                drawLine(formatCode(turn.guess) + " | Exact: " +
-                         std::to_string(turn.result.exact) + " | Partial: " +
-                         std::to_string(turn.result.partial), rowY);
+                float pegX = 340.f;
+
+                for (int symbol : turn.guess) {
+                    peg.setFillColor(pegColors[symbol - 1]);
+                    peg.setPosition({pegX, rowY});
+                    window.draw(peg);
+
+                    pegLabel.setString(std::to_string(symbol));
+                    centerText(pegLabel, {pegX, rowY});
+                    window.draw(pegLabel);
+
+                    pegX += 34.f;
+                }
+
+                drawLine("Exact: " + std::to_string(turn.result.exact) +
+                         "   Partial: " + std::to_string(turn.result.partial),
+                         rowY, 590.f);
                 rowY += 28.f;
             }
 
